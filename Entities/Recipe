@@ -1,0 +1,117 @@
+{
+  "name": "Recipe",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Recipe name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the recipe"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "URL to recipe image"
+    },
+    "prep_time": {
+      "type": "number",
+      "description": "Preparation time in minutes"
+    },
+    "cook_time": {
+      "type": "number",
+      "description": "Cooking time in minutes"
+    },
+    "servings": {
+      "type": "number",
+      "description": "Number of servings"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ],
+      "default": "easy"
+    },
+    "meal_type": {
+      "type": "string",
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "snack",
+        "dessert"
+      ],
+      "description": "Type of meal"
+    },
+    "dietary_tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "vegetarian",
+          "vegan",
+          "gluten_free",
+          "dairy_free",
+          "keto",
+          "paleo",
+          "low_carb",
+          "high_protein"
+        ]
+      },
+      "description": "Dietary tags for the recipe"
+    },
+    "ingredients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "List of ingredients with amounts"
+    },
+    "instructions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Step-by-step cooking instructions"
+    },
+    "nutrition": {
+      "type": "object",
+      "properties": {
+        "calories": {
+          "type": "number"
+        },
+        "protein": {
+          "type": "number"
+        },
+        "carbs": {
+          "type": "number"
+        },
+        "fat": {
+          "type": "number"
+        },
+        "fiber": {
+          "type": "number"
+        }
+      },
+      "description": "Nutritional information per serving"
+    }
+  },
+  "required": [
+    "title",
+    "meal_type"
+  ]
+}
