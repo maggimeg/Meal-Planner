@@ -1,0 +1,48 @@
+{
+  "name": "MealPlan",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date for this meal plan"
+    },
+    "meal_type": {
+      "type": "string",
+      "enum": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "snack"
+      ],
+      "description": "Type of meal"
+    },
+    "recipe_id": {
+      "type": "string",
+      "description": "ID of the planned recipe"
+    },
+    "recipe_title": {
+      "type": "string",
+      "description": "Title of the recipe (for quick access)"
+    },
+    "recipe_image": {
+      "type": "string",
+      "description": "Image URL of the recipe"
+    },
+    "servings_planned": {
+      "type": "number",
+      "default": 1,
+      "description": "Number of servings planned"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Personal notes for this meal"
+    }
+  },
+  "required": [
+    "date",
+    "meal_type",
+    "recipe_id",
+    "recipe_title"
+  ]
+}
