@@ -1,0 +1,44 @@
+{
+  "name": "ShoppingList",
+  "type": "object",
+  "properties": {
+    "week_starting": {
+      "type": "string",
+      "format": "date",
+      "description": "Start date of the week this shopping list covers"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "purchased": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "description": "Shopping list items"
+    },
+    "total_recipes": {
+      "type": "number",
+      "description": "Number of recipes this list covers"
+    }
+  },
+  "required": [
+    "week_starting",
+    "items"
+  ]
+}
