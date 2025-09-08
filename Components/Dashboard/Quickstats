@@ -1,0 +1,32 @@
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+
+const colorClasses = {
+  orange: "bg-orange-500 text-orange-500 bg-orange-100",
+  green: "bg-green-500 text-green-500 bg-green-100", 
+  red: "bg-red-500 text-red-500 bg-red-100",
+  blue: "bg-blue-500 text-blue-500 bg-blue-100"
+};
+
+export default function QuickStats({ title, value, subtitle, icon: Icon, color = "orange" }) {
+  const colorClass = colorClasses[color];
+  const [bgColor, textColor, lightBg] = colorClass.split(" ");
+
+  return (
+    <Card className="relative overflow-hidden border-gray-200 shadow-md hover:shadow-lg transition-shadow">
+      <div className={`absolute top-0 right-0 w-32 h-32 ${lightBg} rounded-full -translate-y-8 translate-x-8 opacity-30`} />
+      <CardContent className="p-6 relative">
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-sm font-medium text-gray-600">{title}</p>
+            <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
+            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+          </div>
+          <div className={`p-3 rounded-xl ${lightBg}`}>
+            <Icon className={`w-6 h-6 ${textColor}`} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
