@@ -1,0 +1,118 @@
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+
+const dietaryOptions = [
+  'vegetarian', 'vegan', 'gluten_free', 'dairy_free', 
+  'keto', 'paleo', 'low_carb', 'high_protein'
+];
+
+const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'];
+const difficulties = ['easy', 'medium', 'hard'];
+
+export default function RecipeFilters({ filters, onFiltersChange }) {
+  const updateFilter = (key, value) => {
+    onFiltersChange({ ...filters, [key]: value });
+  };
+
+  const toggleDietaryTag = (tag) => {
+    const currentTags = filters.dietary_tags || [];
+    const newTags = currentTags.includes(tag) 
+      ? currentTags.filter(t => t !== tag)
+      : [...currentTags, tag];
+    updateFilter('dietary_tags', newTags);
+  };
+
+  const clearAllFilters = () => {
+    onFiltersChange({
+      meal_type: "",
+      dietary_tags: [],
+      difficulty: "",
+      max_cook_time: ""
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <Label className="text-sm font-medium mb-3 block">Meal Type</Label>
+        <Select value={filters.meal_type} onValueChange={(value) => updateFilter('meal_type', value)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Any meal type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={null}>Any meal type</SelectItem>
+            {mealTypes.map((type) => (
+              <SelectItem key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium mb-3 block">Dietary Preferences</Label>
+        <div className="flex flex-wrap gap-2">
+          {dietaryOptions.map((tag) => (
+            <Badge
+              key={tag}
+              variant={filters.dietary_tags?.includes(tag) ? "default" : "outline"}
+              className="cursor-pointer hover:bg-orange-100"
+              onClick={() => toggleDietaryTag(tag)}
+            >
+              {tag.replace('_', ' ')}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <Label className="text-sm font-medium mb-3 block">Difficulty</Label>
+        <Select value={filters.difficulty} onValueChange={(value) => updateFilter('difficulty', value)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Any difficulty" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={null}>Any difficulty</SelectItem>
+            {difficulties.map((diff) => (
+              <SelectItem key={diff} value={diff}>
+                {diff.charAt(0).toUpperCase() + diff.slice(1)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label htmlFor="max_cook_time" className="text-sm font-medium mb-3 block">
+          Max Cooking Time (minutes)
+        </Label>
+        <Input
+          id="max_cook_time"
+          type="number"
+          placeholder="e.g. 30"
+          value={filters.max_cook_time}
+          onChange={(e) => updateFilter('max_cook_time', e.target.value)}
+        />
+      </div>
+
+      <Button 
+        variant="outline" 
+        onClick={clearAllFilters}
+        className="w-full"
+      >
+        Clear All Filters
+      </Button>
+    </div>
+  );
+}
