@@ -1,0 +1,102 @@
+
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Plus, Clock, Users, RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+
+const mealTypeColors = {
+  breakfast: "bg-yellow-100 text-yellow-800",
+  lunch: "bg-green-100 text-green-800", 
+  dinner: "bg-blue-100 text-blue-800",
+  snack: "bg-purple-100 text-purple-800"
+};
+
+export default function TodaysMeals({ mealPlan, isLoading, onRefresh }) {
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Today's Meals</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Array(3).fill(0).map((_, i) => (
+              <div key={i} className="flex items-center gap-4">
+                <Skeleton className="w-16 h-16 rounded-lg" />
+                <div className="flex-1">
+                  <Skeleton className="h-4 w-32 mb-2" />
+                  <Skeleton className="h-3 w-20" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="shadow-md">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-xl">Today's Meals</CardTitle>
+        <div className="flex items-center gap-2">
+           <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-500" onClick={onRefresh}>
+             <RefreshCw className="w-4 h-4"/>
+           </Button>
+          <Link to={createPageUrl("MealPlanner")}>
+            <Button size="sm" variant="outline" className="border-orange-200 hover:bg-orange-50">
+              <Plus className="w-4 h-4 mr-1" />
+              Add Meal
+            </Button>
+          </Link>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {mealPlan.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <Clock className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="font-medium text-gray-900 mb-2">No meals planned for today</h3>
+            <p className="text-gray-500 mb-4">Start planning your meals to eat better and save time!</p>
+            <Link to={createPageUrl("MealPlanner")}>
+              <Button className="bg-orange-500 hover:bg-orange-600">
+                Plan Today's Meals
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {mealPlan.map((meal) => (
+              <div key={meal.id} className="flex items-center gap-4 p-4 rounded-lg border border-gray-100 hover:border-orange-200 transition-colors">
+                <img
+                  src={meal.recipe_image || `https://images.unsplash.com/photo-1546554137-f86b9593a222?w=100&h=100&fit=crop`}
+                  alt={meal.recipe_title}
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900">{meal.recipe_title}</h4>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant="secondary" className={mealTypeColors[meal.meal_type]}>
+                      {meal.meal_type}
+                    </Badge>
+                    {meal.servings_planned && (
+                      <span className="text-sm text-gray-500 flex items-center gap-1">
+                        <Users className="w-3 h-3" />
+                        {meal.servings_planned} servings
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
