@@ -1,0 +1,98 @@
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Heart, Clock, Users, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+
+export default function FavoriteRecipes({ recipes, isLoading }) {
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Favorite Recipes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Array(3).fill(0).map((_, i) => (
+              <div key={i} className="flex gap-3">
+                <Skeleton className="w-16 h-16 rounded-lg" />
+                <div className="flex-1">
+                  <Skeleton className="h-4 w-24 mb-2" />
+                  <Skeleton className="h-3 w-32" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="shadow-md">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-xl flex items-center gap-2">
+          <Heart className="w-5 h-5 text-red-500" />
+          Favorite Recipes
+        </CardTitle>
+        <Link to={createPageUrl("MyRecipes")}>
+          <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50">
+            View All <ArrowRight className="w-4 h-4 ml-1" />
+          </Button>
+        </Link>
+      </CardHeader>
+      <CardContent>
+        {recipes.length === 0 ? (
+          <div className="text-center py-6">
+            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500 mb-3">No favorite recipes yet</p>
+            <Link to={createPageUrl("RecipeFinder")}>
+              <Button size="sm" className="bg-red-500 hover:bg-red-600">
+                Discover Recipes
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {recipes.slice(0, 4).map((recipe) => (
+              <div key={recipe.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <img
+                  src={recipe.image_url || `https://images.unsplash.com/photo-1546554137-f86b9593a222?w=100&h=100&fit=crop`}
+                  alt={recipe.title}
+                  className="w-14 h-14 rounded-lg object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-gray-900 truncate">{recipe.title}</h4>
+                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                    {recipe.cook_time && (
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {recipe.cook_time}m
+                      </span>
+                    )}
+                    {recipe.servings && (
+                      <span className="flex items-center gap-1">
+                        <Users className="w-3 h-3" />
+                        {recipe.servings}
+                      </span>
+                    )}
+                  </div>
+                  {recipe.dietary_tags && recipe.dietary_tags.length > 0 && (
+                    <div className="mt-1">
+                      <Badge size="sm" variant="outline" className="text-xs">
+                        {recipe.dietary_tags[0].replace('_', ' ')}
+                      </Badge>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
